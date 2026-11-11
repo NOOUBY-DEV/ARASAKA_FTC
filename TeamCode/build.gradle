@@ -1,0 +1,96 @@
+apply plugin: 'com.android.application'
+
+//
+// build.gradle in TeamCode
+//
+// Most of the definitions for building your module reside in a common, shared
+// file 'build.common.gradle'. Being factored in this way makes it easier to
+// integrate updates to the FTC into your code. If you really need to customize
+// the build definitions, you can place those customizations in this file, but
+// please think carefully as to whether such customizations are really necessary
+// before doing so.
+
+// Custom definitions may go here
+
+// Include common definitions from above.apply plugin: 'com.android.application'
+
+//
+// build.gradle in TeamCode
+//
+// Most of the definitions for building your module reside in a common, shared
+// file 'build.common.gradle'. Being factored in this way makes it easier to
+// integrate updates to the FTC into your code. If you really need to customize
+// the build definitions, you can place those customizations in this file, but
+// please think carefully as to whether such customizations are really necessary
+// before doing so.
+
+// Custom definitions may go here
+
+// Include common definitions from above.
+apply from: '../build.common.gradle'
+apply from: '../build.dependencies.gradle'
+
+android {
+    namespace = 'org.firstinspires.ftc.teamcode'
+
+    packagingOptions {
+        jniLibs.useLegacyPackaging true
+    }
+}
+
+// 1. 加在 android { ... } 與 dependencies { ... } 之間：
+repositories {
+    maven { url = 'https://maven.brott.dev/' }
+}
+
+// 2. 在原本的 dependencies { ... } 括號入面，最底加入呢 4 行：
+dependencies {
+    implementation project(':FtcRobotController')
+//    annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
+
+    // 👇 加入以下 4 行 RoadRunner 1.0 及 FTC Dashboard 套件 👇
+    implementation "com.acmerobotics.roadrunner:ftc:0.1.25"
+    implementation "com.acmerobotics.roadrunner:core:1.0.1"
+    implementation "com.acmerobotics.roadrunner:actions:1.0.1"
+    implementation "com.acmerobotics.dashboard:dashboard:0.5.1"
+}
+
+//dependencies {
+//    implementation project(':FtcRobotController')
+//}
+
+
+
+apply from: '../build.common.gradle'
+apply from: '../build.dependencies.gradle'
+
+android {
+    namespace = 'org.firstinspires.ftc.teamcode'
+
+    packagingOptions {
+        jniLibs.useLegacyPackaging true
+    }
+}
+
+// 1. 加在 android { ... } 與 dependencies { ... } 之間：
+repositories {
+    maven { url = 'https://maven.brott.dev/' }
+}
+
+// 2. 在原本的 dependencies { ... } 括號入面，最底加入呢 4 行：
+dependencies {
+    implementation project(':FtcRobotController')
+//    annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
+
+    // 👇 加入以下 4 行 RoadRunner 1.0 及 FTC Dashboard 套件 👇
+    implementation "com.acmerobotics.roadrunner:ftc:0.1.25"
+    implementation "com.acmerobotics.roadrunner:core:1.0.1"
+    implementation "com.acmerobotics.roadrunner:actions:1.0.1"
+    implementation "com.acmerobotics.dashboard:dashboard:0.5.1"
+}
+
+//dependencies {
+//    implementation project(':FtcRobotController')
+//}
+
+
