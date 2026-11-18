@@ -220,7 +220,7 @@ public class basic_movement_test extends LinearOpMode
 
                 if (!apriltag_data_list.isEmpty())
                 {
-                        apriltag_data_list.sort(Comparator.comparingDouble(apriltag_data::get_tx));
+                        apriltag_data_list.sort(Comparator.comparingDouble(apriltag_data::get_abs_tx));
                 }
         }
 

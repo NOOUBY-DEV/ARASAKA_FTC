@@ -16,9 +16,9 @@ public class apriltag_data
             this.is_valid = is_valid;
         }
 
-        public double get_tx()
+        public double get_abs_tx()
         {
-                return tx;
+                return Math.abs(tx);
         }
 
         public Boolean is_red_team()
