@@ -10,13 +10,16 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class basic_movement_test extends LinearOpMode
 {
         private DcMotorEx motor_lf, motor_rf, motor_lb, motor_rb, shoot_motor;
-        private double joystick_strafe_x, joystick_strafe_y, joystick_rotate_x;
+        private double joystick_strafe_x, joystick_strafe_y, joystick_rotate_x, shooter_trigger;
+        private boolean is_red_team = true;
 
 
         @Override
-        public void runOpMode() throws InterruptedException
+        public void runOpMode()
         {
                 init_hardware();
+
+                update_team_color(true);
 
                 waitForStart();
 
@@ -45,6 +48,7 @@ public class basic_movement_test extends LinearOpMode
 
         private void run_loop()
         {
+                update_team_color(false);
                 update_gamepad_values();
                 update_robot_movement();
                 update_shoot_motor();
@@ -56,6 +60,38 @@ public class basic_movement_test extends LinearOpMode
                 joystick_strafe_x = gamepad1.left_stick_x;
                 joystick_strafe_y = gamepad1.left_stick_y;
                 joystick_rotate_x = gamepad1.right_stick_x;
+                shooter_trigger = gamepad1.right_trigger;
+        }
+
+        private void update_team_color(boolean to_wait)
+        {
+                if (!to_wait)
+                {
+                        if (!gamepad1.back) return;
+
+                        if (gamepad1.right_bumper)
+                        {
+                                is_red_team = true;
+
+                        } else if (gamepad1.left_bumper)
+                        {
+                                is_red_team = false;
+                        }
+
+                        return;
+                }
+
+                while (!opModeIsActive() && !isStopRequested())
+                {
+                        if (gamepad1.right_bumper)
+                        {
+                                is_red_team = true;
+
+                        } else if (gamepad1.left_bumper)
+                        {
+                                is_red_team = false;
+                        }
+                }
         }
 
         private void update_robot_movement()
@@ -99,13 +135,17 @@ public class basic_movement_test extends LinearOpMode
                 motor_rb.setPower(rb);
         }
 
-        private void update_shoot_motor()
+        private void update_shoot_motor() // not tested yet
         {
-                final boolean activated = gamepad1.right_trigger >= 0.3;
+                final double activation_point = 0.3;
 
-                if (activated)
+                if (shooter_trigger >= activation_point)
                 {
-                        shoot_motor.setPower(gamepad1.right_trigger);
+                        shoot_motor.setPower(shooter_trigger);
+                }
+                else
+                {
+                        shoot_motor.setPower(0);
                 }
         }
 
@@ -113,10 +153,21 @@ public class basic_movement_test extends LinearOpMode
         {
                 final int shoot_motor_speed_percent = (int) (shoot_motor.getPower() * 100);
 
+                String team_color;
+                if (is_red_team)
+                {
+                        team_color = "red";
+                }
+                else
+                {
+                        team_color = "blue";
+                }
+
+                telemetry.addData("team_color :- ", team_color);
                 telemetry.addData("joystick_strafe.x :- ", joystick_strafe_x);
                 telemetry.addData("joystick_strafe.y :- ", joystick_strafe_y);
                 telemetry.addData("joystick_rotate.x :- ", joystick_rotate_x);
-                telemetry.addData("motor_speed (%) :- ", shoot_motor_speed_percent);
+                telemetry.addData("shooter_motor_usage_speed (%) :- ", shoot_motor_speed_percent);
 
                 telemetry.update();
         }
